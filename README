@@ -1,0 +1,36 @@
+finspider: Fetches financial data from the web
+Version 0.1.0 (in development)
+
+Installation
+  Use as a Rust library 
+  
+Usage
+  add the following in Cargo.toml:
+
+    spider = { git = "https://github.com/cy6erlion/spider.git" }
+
+Documentation
+  use rust doc:
+
+    $ cargo doc
+    
+Contributing
+  All contibutions welcomed (documentation, code, bug reports etc),
+  for large contributions open an issue on gitlab.
+
+Unlicense
+  Written and placed in the public domain by Jackson G. Kaindume
+
+  Anyone is free to copy, modify, publish, use, compile, sell, or
+  distribute this software, either in source code form or as a
+  compiled binary, for any purpose, commercial or non-commercial, 
+  and by any means.
+
+  For more information, please refer to the __UNLICENSE__ file in the
+  repository.
+
+Source
+  $ git clone https://github.com/cy6erlion/spider.git
+  
+Authors
+  Jackson G. Kaindume
