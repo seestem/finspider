@@ -1,6 +1,9 @@
 use crate::{Spider, USER_AGENT, YAHOO_ROOT};
 use scraper::{Html, Selector};
+use serde::{Deserialize, Serialize};
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct CashFlow {
     pub cash_flows_from_used_in_operating_activities_direct: String,
     pub operating_cash_flow: String,

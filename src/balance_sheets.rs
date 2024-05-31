@@ -1,6 +1,9 @@
 use crate::{Spider, USER_AGENT, YAHOO_ROOT};
 use scraper::{Html, Selector};
+use serde::{Deserialize, Serialize};
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct BalanceSheet {
     pub total_assets: String,
     pub total_liabilities_net_minority_interest: String,

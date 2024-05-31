@@ -1,6 +1,9 @@
 use crate::{Spider, USER_AGENT, YAHOO_ROOT};
 use scraper::{Html, Selector};
+use serde::{Deserialize, Serialize};
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct IncomeStatement {
     pub total_revenue: String,
     pub income_from_associates_and_other_participating_interests: String,
