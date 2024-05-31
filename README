@@ -5,7 +5,11 @@ Features
   - Balance Sheets
   - Cash Flows
   - Income Statements
-  
+
+Cargo Features
+  - finacials: Used for finacial statements (balance sheet, cash flow
+    andincome statement)
+
 Usage
   add the following in Cargo.toml:
 

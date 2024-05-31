@@ -1,5 +1,8 @@
+#[cfg(feature = "finacials")]
 pub mod balance_sheets;
+#[cfg(feature = "finacials")]
 pub mod cash_flows;
+#[cfg(feature = "finacials")]
 pub mod income_statements;
 
 pub const USER_AGENT: &'static str =
