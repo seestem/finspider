@@ -7,7 +7,7 @@ Installation
 Usage
   add the following in Cargo.toml:
 
-    spider = { git = "https://github.com/cy6erlion/spider.git" }
+    finspider = { git = "https://github.com/cy6erlion/finspider.git" }
 
 Documentation
   use rust doc:
@@ -30,7 +30,7 @@ Unlicense
   repository.
 
 Source
-  $ git clone https://github.com/cy6erlion/spider.git
+  $ git clone https://github.com/cy6erlion/finspider.git
   
 Authors
   Jackson G. Kaindume
