@@ -1,13 +1,10 @@
 finspider: Fetches financial data from the web
-Version 0.1.0 (in development)
+Version 0.1.0
 
 Features
   - Balance Sheets
   - Cash Flows
   - Income Statements
-  
-Installation
-  Use as a Rust library 
   
 Usage
   add the following in Cargo.toml:
