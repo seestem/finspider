@@ -237,9 +237,9 @@ mod tests {
     fn test_income_statements_db() {
         let db_user = env::var("DB_USER").expect("DB_HOST not set");
         let port = env::var("DB_PORT").expect("DB_PORT not set");
-        let password = env::var("POSTGRES_PASSWORD").expect("POSTGRES_PASSWORD not set");
+        let password = env::var("DB_PASSWORD").expect("DB_PASSWORD not set");
         let host = env::var("DB_HOST").expect("DB_HOST not set");
-        let db_name = env::var("POSTGRES_DB").expect("POSTGRES_DB not set");
+        let db_name = env::var("DB_NAME").expect("DB_NAME not set");
         let db_url = format!("postgres://{db_user}:{password}@{host}:{port}/{db_name}");
 
         let mut db = Client::connect(&db_url, NoTls).unwrap();
