@@ -8,13 +8,10 @@
 ⣿⣿⣿⠿⠟⣩⣴⣶⣿⣿⣶⡞⠉⣠⣇⠄⣿⣶⣦⣄⡀⠲⢿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣷⣶⣾⣿⣿⣿⣿⣿⡿⢠⣿⣿⣿⢀⣿⣿⣿⣿⣿⣿⣶⣌⠻⠿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢡⣿⣿⣿⡏⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣾⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣸⣿⣿⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-┌─┐┬┌┐┌┌─┐┌─┐┬┌┬┐┌─┐┬─┐
-├┤ ││││└─┐├─┘│ ││├┤ ├┬┘
-└  ┴┘└┘└─┘┴  ┴─┴┘└─┘┴└─
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣸⣿⣿⣿⣷⣿⣿version 0.1.0
 
-finspider: Fetches financial data from the web
-Version 0.1.0
+finspider
+>Downloads financial data
 
 Features
   - Balance Sheets
