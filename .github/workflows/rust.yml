@@ -62,25 +62,3 @@ jobs:
         if: matrix.mode == 'release'
         run: RUST_TEST_THREADS=1 cargo test --all-features --release
 
-  fuzz:
-    name: Fuzz
-    strategy:
-      matrix:
-        target: ["copy", "exec", "query"]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: nightly
-
-      - name: Install postgreSQL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libpq-dev postgresql
-          sudo service postgresql start && sleep 3
-          sudo -u postgres psql --command "ALTER USER postgres PASSWORD 'root';"
-
-      - name: Run unit tests
-        run: cargo test --verbose --all-features
