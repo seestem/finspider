@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "postgres")]
 pub mod database;
-pub const INCOME_STATEMENT_SCHEMA: i16 = 0;
+pub const INCOME_STATEMENT_SCHEMA_VERSION: i16 = 0;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -108,7 +108,7 @@ impl IncomeStatement {
                 tax_rate_for_calcs: values[14].clone(),
                 tax_effect_of_unusual_items: values[15].clone(),
                 filed: date,
-                version: INCOME_STATEMENT_SCHEMA,
+                version: INCOME_STATEMENT_SCHEMA_VERSION,
             }
         } else {
             // TODO: do not panic
