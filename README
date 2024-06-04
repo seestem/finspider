@@ -20,7 +20,7 @@ Features
 
 Cargo Features
   - finacials: Used for finacial statements (balance sheet, cash flow
-    andincome statement)
+    and income statement)
   - postgres: Support for storing downloaded data in PostgresSQL
 
 Usage
