@@ -3,7 +3,7 @@ on: [pull_request, push]
 env:
   CARGO_TERM_COLOR: always
   DB_HOST: localhost
-  DB_PORT: ${{ job.services.postgres.ports[5432] }}
+  DB_PORT: 5432
   DB_USER: postgres
   DB_PASSWORD: root
   DB_NAME: postgres
