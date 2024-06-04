@@ -227,6 +227,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
 #[cfg(test)]
 mod tests {
     use super::*;
+    use chrono::Datelike;
     use postgres::{Client, NoTls};
     use std::env;
     const TABLE: &'static str = "income_statement_test_database";
