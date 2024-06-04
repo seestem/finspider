@@ -29,10 +29,7 @@ CREATE TABLE IF NOT EXISTS {table_name} (
         tax_effect_of_unusual_items varchar(100),
         filed date,
         hash text UNIQUE,
-        version smallint,
-	CONSTRAINT \"id is PRIMARY KEY\" PRIMARY KEY (id),
-	CONSTRAINT \"id is unique\" UNIQUE (id),
-	CONSTRAINT \"hash is unique\" UNIQUE (id)
+        version smallint
 );
 -- ddl-end --
 ALTER TABLE {table_name} OWNER TO {db_owner};
