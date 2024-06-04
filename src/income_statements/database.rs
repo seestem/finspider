@@ -102,8 +102,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                     &income_statement.version,
                 ],
             )
-            .unwrap();
-        //.map_err(|_| Error::SQL)?;
+            .map_err(|_| Error::SQL)?;
         Ok(())
     }
 
