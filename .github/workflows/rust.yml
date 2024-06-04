@@ -39,6 +39,6 @@ jobs:
       env:
           DB_HOST: localhost
           DB_PORT: ${{ job.services.postgres.ports[5432] }}
-          DB_USER: "postgres"
-          DB_PASSWORD: "postgres"
-          DB_NAME: "postgres"
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_NAME: postgres
