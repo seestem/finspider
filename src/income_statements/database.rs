@@ -1,6 +1,5 @@
 use super::IncomeStatement;
-use crate::{error::Error, Spider, USER_AGENT, YAHOO_ROOT};
-use chrono::{Datelike, NaiveDate};
+use crate::error::Error;
 use postgres::Client;
 
 /// Database management for income statements
@@ -307,7 +306,7 @@ mod tests {
     }
 
     fn drop_database(client: &mut Client) {
-        let sql = format!("DROP TABLE {TABLE};");
+        let sql = format!("DROP TABLE IF EXISTS {TABLE};");
 
         client
             .batch_execute(&sql)

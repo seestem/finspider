@@ -19,7 +19,7 @@ pub struct CashFlow {
 }
 
 impl CashFlow {
-    fn parse(html: &str) -> Vec<CashFlow> {
+    pub fn parse(html: &str) -> Vec<CashFlow> {
         let document = Html::parse_document(html);
         let rows = Selector::parse(".tableBody .row").unwrap();
         let mut year1 = vec![];
@@ -32,9 +32,8 @@ impl CashFlow {
             let columns_html = row.inner_html();
             let fragment = Html::parse_fragment(&columns_html);
             let columns = Selector::parse(".column").unwrap();
-            let mut column_count = 0;
 
-            for column in fragment.select(&columns) {
+            for (column_count, column) in fragment.select(&columns).enumerate() {
                 if column_count != 0 || column_count != 1 {
                     let column_html = column.html();
                     let fragment = Html::parse_fragment(&column_html);
@@ -59,7 +58,6 @@ impl CashFlow {
                         year5.push(t);
                     }
                 }
-                column_count += 1;
             }
         }
 

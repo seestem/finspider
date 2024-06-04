@@ -1,4 +1,4 @@
-use crate::{error::Error, Spider, USER_AGENT, YAHOO_ROOT};
+use crate::{Spider, USER_AGENT, YAHOO_ROOT};
 use base64::prelude::*;
 use chrono::{Datelike, NaiveDate};
 #[cfg(feature = "postgres")]
@@ -46,9 +46,8 @@ impl IncomeStatement {
             let columns_html = row.inner_html();
             let fragment = Html::parse_fragment(&columns_html);
             let columns = Selector::parse(".column").unwrap();
-            let mut column_count = 0;
 
-            for column in fragment.select(&columns) {
+            for (column_count, column) in fragment.select(&columns).enumerate() {
                 if column_count != 0 || column_count != 1 {
                     let column_html = column.html();
                     let fragment = Html::parse_fragment(&column_html);
@@ -71,7 +70,6 @@ impl IncomeStatement {
                         year4.push(t);
                     }
                 }
-                column_count += 1;
             }
         }
 
@@ -121,34 +119,31 @@ impl IncomeStatement {
     pub fn hash(&self) -> String {
         let mut hasher = blake3::Hasher::new();
 
-        hasher.update(format!("{}", &self.symbol).as_bytes());
-        hasher.update(&self.total_revenue.as_bytes());
+        hasher.update(self.symbol.to_string().as_bytes());
+        hasher.update(self.total_revenue.as_bytes());
         hasher.update(
-            &self
-                .income_from_associates_and_other_participating_interests
+            self.income_from_associates_and_other_participating_interests
                 .as_bytes(),
         );
-        hasher.update(&self.special_income_charges.as_bytes());
-        hasher.update(&self.other_non_operating_income_expenses.as_bytes());
-        hasher.update(&self.pretax_income.as_bytes());
-        hasher.update(&self.tax_provision.as_bytes());
+        hasher.update(self.special_income_charges.as_bytes());
+        hasher.update(self.other_non_operating_income_expenses.as_bytes());
+        hasher.update(self.pretax_income.as_bytes());
+        hasher.update(self.tax_provision.as_bytes());
         hasher.update(
-            &self
-                .net_income_from_continuing_operation_net_minority_interest
+            self.net_income_from_continuing_operation_net_minority_interest
                 .as_bytes(),
         );
-        hasher.update(&self.diluted_ni_available_to_com_stockholders.as_bytes());
+        hasher.update(self.diluted_ni_available_to_com_stockholders.as_bytes());
         hasher.update(
-            &self
-                .net_from_continuing_and_discontinued_operation
+            self.net_from_continuing_and_discontinued_operation
                 .as_bytes(),
         );
-        hasher.update(&self.normalized_income.as_bytes());
-        hasher.update(&self.reconciled_depreciation.as_bytes());
-        hasher.update(&self.total_unusual_items_excluding_goodwill.as_bytes());
-        hasher.update(&self.total_unusual_items.as_bytes());
-        hasher.update(&self.tax_rate_for_calcs.as_bytes());
-        hasher.update(&self.tax_effect_of_unusual_items.as_bytes());
+        hasher.update(self.normalized_income.as_bytes());
+        hasher.update(self.reconciled_depreciation.as_bytes());
+        hasher.update(self.total_unusual_items_excluding_goodwill.as_bytes());
+        hasher.update(self.total_unusual_items.as_bytes());
+        hasher.update(self.tax_rate_for_calcs.as_bytes());
+        hasher.update(self.tax_effect_of_unusual_items.as_bytes());
 
         let hash = hasher.finalize();
         BASE64_STANDARD.encode(hash.as_bytes())
