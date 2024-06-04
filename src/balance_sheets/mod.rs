@@ -155,67 +155,67 @@ impl Spider for BalanceSheet {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-//     #[test]
-//     fn test_balance_sheets() {
-//         let symbol = "SBKP.JO";
-//         let html = BalanceSheet::fetch(symbol).unwrap();
-//         let balance_sheets: Vec<BalanceSheet> = BalanceSheet::parse(&html, symbol);
+    #[test]
+    fn test_balance_sheets() {
+        let symbol = "SBKP.JO";
+        let html = BalanceSheet::fetch(symbol).unwrap();
+        let balance_sheets: Vec<BalanceSheet> = BalanceSheet::parse(&html, symbol);
 
-//         assert_eq!(balance_sheets.len(), 5);
-//         assert_eq!(
-//             balance_sheets[0].total_assets,
-//             "3,065,745,000.00".to_string()
-//         );
-//         assert_eq!(
-//             balance_sheets[0].total_liabilities_net_minority_interest,
-//             "2,788,825,000.00".to_string()
-//         );
-//         assert_eq!(
-//             balance_sheets[0].total_equity_gross_minority_interest,
-//             "276,920,000.00".to_string()
-//         );
-//         assert_eq!(
-//             balance_sheets[0].total_capitalization,
-//             "393,537,000.00".to_string()
-//         );
-//         assert_eq!(
-//             balance_sheets[0].preferred_stock_equity,
-//             "5,503,000.00".to_string()
-//         );
-//         assert_eq!(
-//             balance_sheets[0].common_stock_equity,
-//             "255,109,000.00".to_string()
-//         );
-//         assert_eq!(
-//             balance_sheets[0].net_tangible_assets,
-//             "247,889,000.00".to_string()
-//         );
-//         assert_eq!(
-//             balance_sheets[0].invested_capital,
-//             "388,034,000.00".to_string()
-//         );
-//         assert_eq!(
-//             balance_sheets[0].tangible_book_value,
-//             "242,386,000.00".to_string()
-//         );
-//         assert_eq!(balance_sheets[0].total_debt, "136,639,000.00".to_string());
-//         assert_eq!(balance_sheets[0].net_debt, "--".to_string());
-//         assert_eq!(balance_sheets[0].share_issued, "1,675,775.23".to_string());
-//         assert_eq!(
-//             balance_sheets[0].ordinary_shares_number,
-//             "1,657,074.12".to_string()
-//         );
-//         assert_eq!(
-//             balance_sheets[0].preferred_shares_number,
-//             "60,982.25".to_string()
-//         );
-//         assert_eq!(
-//             balance_sheets[0].treasury_shares_number,
-//             "18,701.11".to_string()
-//         );
-//     }
-// }
+        assert_eq!(balance_sheets.len(), 5);
+        assert_eq!(
+            balance_sheets[0].total_assets,
+            "3,065,745,000.00".to_string()
+        );
+        assert_eq!(
+            balance_sheets[0].total_liabilities_net_minority_interest,
+            "2,788,825,000.00".to_string()
+        );
+        assert_eq!(
+            balance_sheets[0].total_equity_gross_minority_interest,
+            "276,920,000.00".to_string()
+        );
+        assert_eq!(
+            balance_sheets[0].total_capitalization,
+            "393,537,000.00".to_string()
+        );
+        assert_eq!(
+            balance_sheets[0].preferred_stock_equity,
+            "5,503,000.00".to_string()
+        );
+        assert_eq!(
+            balance_sheets[0].common_stock_equity,
+            "255,109,000.00".to_string()
+        );
+        assert_eq!(
+            balance_sheets[0].net_tangible_assets,
+            "247,889,000.00".to_string()
+        );
+        assert_eq!(
+            balance_sheets[0].invested_capital,
+            "388,034,000.00".to_string()
+        );
+        assert_eq!(
+            balance_sheets[0].tangible_book_value,
+            "242,386,000.00".to_string()
+        );
+        assert_eq!(balance_sheets[0].total_debt, "136,639,000.00".to_string());
+        assert_eq!(balance_sheets[0].net_debt, "--".to_string());
+        assert_eq!(balance_sheets[0].share_issued, "1,675,775.23".to_string());
+        assert_eq!(
+            balance_sheets[0].ordinary_shares_number,
+            "1,657,074.12".to_string()
+        );
+        assert_eq!(
+            balance_sheets[0].preferred_shares_number,
+            "60,982.25".to_string()
+        );
+        assert_eq!(
+            balance_sheets[0].treasury_shares_number,
+            "18,701.11".to_string()
+        );
+    }
+}
