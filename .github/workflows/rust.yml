@@ -34,7 +34,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Test postgres connection
-      run: psql + postgresql://postgres@:5432/postgres -c 'SELECT 1;'
+      run: psql -p 5432 -U postgres -d postgres -c 'select 1;'
       
     - name: Build
       run: cargo build --verbose
