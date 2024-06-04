@@ -39,5 +39,4 @@ jobs:
       run: cargo test --verbose --all-features
       env:
           DB_URL: "postgres://postgres:postgres@localhost:5432/postgres"
-      env:
           DB_USER: "postgres"
