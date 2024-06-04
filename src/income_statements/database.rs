@@ -235,7 +235,7 @@ mod tests {
     /// Test the routines for the income statements db
     #[test]
     fn test_income_statements_db() {
-        let db_user = env::var("DB_USER").expect("DB_HOST not set");
+        let db_user = env::var("DB_USER").expect("DB_USER not set");
         let port = env::var("DB_PORT").expect("DB_PORT not set");
         let password = env::var("DB_PASSWORD").expect("DB_PASSWORD not set");
         let host = env::var("DB_HOST").expect("DB_HOST not set");
