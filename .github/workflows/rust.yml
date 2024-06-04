@@ -32,6 +32,9 @@ jobs:
               - 5432:5432
     steps:
     - uses: actions/checkout@v3
+
+    - name: Test postgres connection
+      run: psql postgres://postgres:postgres@localhost:5432/postgres -c 'SELECT 1;'
       
     - name: Build
       run: cargo build --verbose
