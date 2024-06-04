@@ -9,6 +9,7 @@ Features
 Cargo Features
   - finacials: Used for finacial statements (balance sheet, cash flow
     andincome statement)
+  - postgres: Support for storing downloaded data in PostgresSQL
 
 Usage
   add the following in Cargo.toml:
