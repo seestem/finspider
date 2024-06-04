@@ -2,6 +2,7 @@
 pub mod balance_sheets;
 #[cfg(feature = "finacials")]
 pub mod cash_flows;
+pub mod error;
 #[cfg(feature = "finacials")]
 pub mod income_statements;
 
