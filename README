@@ -17,6 +17,7 @@ Features
   - Balance Sheets
   - Cash Flows
   - Income Statements
+  - PostgreSQL based storage
 
 Cargo Features
   - finacials: Used for finacial statements (balance sheet, cash flow
