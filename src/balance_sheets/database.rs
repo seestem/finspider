@@ -35,8 +35,9 @@ CREATE TABLE IF NOT EXISTS {table_name} (
 ALTER TABLE {table_name} OWNER TO {db_owner};
 -- ddl-end --"
         );
-        client.batch_execute(&sql).unwrap();
-        //.map_err(|_| Error::TableCreation)?;
+        client
+            .batch_execute(&sql)
+            .map_err(|_| Error::TableCreation)?;
 
         Ok(())
     }
