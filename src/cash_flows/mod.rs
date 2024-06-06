@@ -1,10 +1,18 @@
 use crate::{Spider, USER_AGENT, YAHOO_ROOT};
+use base64::prelude::*;
+use chrono::{Datelike, NaiveDate};
 use scraper::{Html, Selector};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[cfg(feature = "postgres")]
+pub mod database;
+
+pub const CASH_FLOWS_SCHEMA_VERSION: i16 = 0;
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CashFlow {
+    pub symbol: String,
     pub cash_flows_from_used_in_operating_activities_direct: String,
     pub operating_cash_flow: String,
     pub investing_cash_flow: String,
@@ -16,10 +24,12 @@ pub struct CashFlow {
     pub repayment_of_debt: String,
     pub repurchase_of_capital_stock: String,
     pub free_cash_flow: String,
+    pub filed: NaiveDate,
+    pub version: i16,
 }
 
 impl CashFlow {
-    pub fn parse(html: &str) -> Vec<CashFlow> {
+    pub fn parse(html: &str, symbol: &str) -> Vec<CashFlow> {
         let document = Html::parse_document(html);
         let rows = Selector::parse(".tableBody .row").unwrap();
         let mut year1 = vec![];
@@ -61,29 +71,66 @@ impl CashFlow {
             }
         }
 
-        let year1 = CashFlow::from_vec(year1);
-        let year2 = CashFlow::from_vec(year2);
-        let year3 = CashFlow::from_vec(year3);
-        let year4 = CashFlow::from_vec(year4);
-        let year5 = CashFlow::from_vec(year5);
+        let year1 = CashFlow::from_vec(year1, symbol);
+        let year2 = CashFlow::from_vec(year2, symbol);
+        let year3 = CashFlow::from_vec(year3, symbol);
+        let year4 = CashFlow::from_vec(year4, symbol);
+        let year5 = CashFlow::from_vec(year5, symbol);
 
         vec![year1, year2, year3, year4, year5]
     }
 
-    fn from_vec(values: Vec<String>) -> Self {
-        Self {
-            cash_flows_from_used_in_operating_activities_direct: values[0].clone(),
-            operating_cash_flow: values[1].clone(),
-            investing_cash_flow: values[2].clone(),
-            financing_cash_flow: values[3].clone(),
-            end_cash_position: values[4].clone(),
-            capital_expenditure: values[5].clone(),
-            issuance_of_capital_stock: values[6].clone(),
-            issuance_of_debt: values[7].clone(),
-            repayment_of_debt: values[8].clone(),
-            repurchase_of_capital_stock: values[9].clone(),
-            free_cash_flow: values[10].clone(),
+    fn from_vec(values: Vec<String>, symbol: &str) -> Self {
+        let current_date = chrono::Utc::now();
+        let year = current_date.year();
+        let month = current_date.month();
+        let day = current_date.day();
+
+        if let Some(date) = chrono::NaiveDate::from_ymd_opt(year, month, day) {
+            Self {
+                symbol: symbol.to_string(),
+                cash_flows_from_used_in_operating_activities_direct: values[0].clone(),
+                operating_cash_flow: values[1].clone(),
+                investing_cash_flow: values[2].clone(),
+                financing_cash_flow: values[3].clone(),
+                end_cash_position: values[4].clone(),
+                capital_expenditure: values[5].clone(),
+                issuance_of_capital_stock: values[6].clone(),
+                issuance_of_debt: values[7].clone(),
+                repayment_of_debt: values[8].clone(),
+                repurchase_of_capital_stock: values[9].clone(),
+                free_cash_flow: values[10].clone(),
+                filed: date,
+                version: CASH_FLOWS_SCHEMA_VERSION,
+            }
+        } else {
+            // TODO: do not panic
+            panic!("Date error");
         }
+    }
+
+    pub fn hash(&self) -> String {
+        let mut hasher = blake3::Hasher::new();
+
+        hasher.update(self.symbol.to_string().as_bytes());
+        hasher.update(
+            self.cash_flows_from_used_in_operating_activities_direct
+                .to_string()
+                .as_bytes(),
+        );
+        hasher.update(self.operating_cash_flow.to_string().as_bytes());
+        hasher.update(self.investing_cash_flow.to_string().as_bytes());
+        hasher.update(self.financing_cash_flow.to_string().as_bytes());
+        hasher.update(self.end_cash_position.to_string().as_bytes());
+        hasher.update(self.capital_expenditure.to_string().as_bytes());
+        hasher.update(self.issuance_of_capital_stock.to_string().as_bytes());
+        hasher.update(self.issuance_of_debt.to_string().as_bytes());
+        hasher.update(self.repayment_of_debt.to_string().as_bytes());
+        hasher.update(self.repurchase_of_capital_stock.to_string().as_bytes());
+        hasher.update(self.free_cash_flow.to_string().as_bytes());
+
+        let hash = hasher.finalize();
+        BASE64_STANDARD.encode(hash.as_bytes())
     }
 }
 impl Spider for CashFlow {
@@ -107,7 +154,7 @@ mod tests {
     fn test_cash_flows() {
         let symbol = "SBKP.JO";
         let html = CashFlow::fetch(symbol).unwrap();
-        let cash_flows: Vec<CashFlow> = CashFlow::parse(&html);
+        let cash_flows: Vec<CashFlow> = CashFlow::parse(&html, symbol);
 
         assert_eq!(cash_flows.len(), 5);
 
