@@ -27,6 +27,8 @@ CREATE TABLE IF NOT EXISTS {table_name} (
         ordinary_shares_number varchar(100),
         preferred_shares_number varchar(100),
         treasury_shares_number varchar(100),
+        working_capital varchar(100),
+        capital_lease_obligations varchar(100),
         filed date,
         hash text UNIQUE,
         version smallint
@@ -66,12 +68,14 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         ordinary_shares_number,
         preferred_shares_number,
         treasury_shares_number,
+        working_capital,
+        capital_lease_obligations,
         filed,
         hash,
         version
 )
                  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
-                         $12, $13, $14, $15, $16, $17, $18, $19);"
+                         $12, $13, $14, $15, $16, $17, $18, $19, $20, $21);"
         );
 
         client
@@ -94,6 +98,8 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                     &balance_sheet.ordinary_shares_number,
                     &balance_sheet.preferred_shares_number,
                     &balance_sheet.treasury_shares_number,
+                    &balance_sheet.working_capital,
+                    &balance_sheet.capital_lease_obligations,
                     &balance_sheet.filed,
                     &balance_sheet.hash(),
                     &balance_sheet.version,
@@ -133,6 +139,8 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                 ordinary_shares_number: row[0].get("ordinary_shares_number"),
                 preferred_shares_number: row[0].get("preferred_shares_number"),
                 treasury_shares_number: row[0].get("treasury_shares_number"),
+                working_capital: row[0].get("working_capital"),
+                capital_lease_obligations: row[0].get("capital_lease_obligations"),
                 version: row[0].get("version"),
                 filed: row[0].get("filed"),
             }))
@@ -163,6 +171,8 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                 ordinary_shares_number: r.get("ordinary_shares_number"),
                 preferred_shares_number: r.get("preferred_shares_number"),
                 treasury_shares_number: r.get("treasury_shares_number"),
+                working_capital: r.get("working_capital"),
+                capital_lease_obligations: r.get("capital_lease_obligations"),
                 filed: r.get("filed"),
                 version: r.get("version"),
             })
@@ -199,6 +209,8 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                 ordinary_shares_number: r.get("ordinary_shares_number"),
                 preferred_shares_number: r.get("preferred_shares_number"),
                 treasury_shares_number: r.get("treasury_shares_number"),
+                working_capital: r.get("working_capital"),
+                capital_lease_obligations: r.get("capital_lease_obligations"),
                 filed: r.get("filed"),
                 version: r.get("version"),
             })
@@ -241,21 +253,23 @@ mod tests {
 
         let balance_sheet = BalanceSheet {
             symbol: "SBKP.JO".to_string(),
-            total_assets: "1000.00".to_string(),
-            total_liabilities_net_minority_interest: "1000.00".to_string(),
-            total_equity_gross_minority_interest: "1000.00".to_string(),
-            total_capitalization: "1000.00".to_string(),
-            preferred_stock_equity: "1000.00".to_string(),
-            common_stock_equity: "1000.00".to_string(),
-            net_tangible_assets: "1000.00".to_string(),
-            invested_capital: "1000.00".to_string(),
-            tangible_book_value: "1000.00".to_string(),
-            total_debt: "1000.00".to_string(),
-            net_debt: "1000.00".to_string(),
-            share_issued: "1000.00".to_string(),
-            ordinary_shares_number: "1000.00".to_string(),
-            preferred_shares_number: "1000.00".to_string(),
-            treasury_shares_number: "1000.00".to_string(),
+            total_assets: Some("1000.00".to_string()),
+            total_liabilities_net_minority_interest: Some("1000.00".to_string()),
+            total_equity_gross_minority_interest: Some("1000.00".to_string()),
+            total_capitalization: Some("1000.00".to_string()),
+            preferred_stock_equity: Some("1000.00".to_string()),
+            common_stock_equity: Some("1000.00".to_string()),
+            net_tangible_assets: Some("1000.00".to_string()),
+            invested_capital: Some("1000.00".to_string()),
+            tangible_book_value: Some("1000.00".to_string()),
+            total_debt: Some("1000.00".to_string()),
+            net_debt: Some("1000.00".to_string()),
+            share_issued: Some("1000.00".to_string()),
+            ordinary_shares_number: Some("1000.00".to_string()),
+            preferred_shares_number: Some("1000.00".to_string()),
+            treasury_shares_number: Some("1000.00".to_string()),
+            working_capital: Some("1000.00".to_string()),
+            capital_lease_obligations: Some("1000.00".to_string()),
             filed: date,
             version: 0,
         };
