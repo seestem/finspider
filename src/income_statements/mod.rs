@@ -13,6 +13,7 @@ pub const INCOME_STATEMENT_SCHEMA_VERSION: i16 = 0;
 #[serde(rename_all = "camelCase")]
 pub struct IncomeStatement {
     pub symbol: String,
+    pub term: NaiveDate,
     pub total_revenue: String,
     pub income_from_associates_and_other_participating_interests: String,
     pub special_income_charges: String,
@@ -42,6 +43,8 @@ impl IncomeStatement {
         let mut year2 = vec![];
         let mut year3 = vec![];
         let mut year4 = vec![];
+        let mut terms = IncomeStatement::get_terms(&document).into_iter();
+        let mut res = vec![];
 
         for row in document.select(&rows) {
             let columns_html = row.inner_html();
@@ -74,24 +77,59 @@ impl IncomeStatement {
             }
         }
 
-        let year1 = IncomeStatement::from_vec(year1, symbol);
-        let year2 = IncomeStatement::from_vec(year2, symbol);
-        let year3 = IncomeStatement::from_vec(year3, symbol);
-        let year4 = IncomeStatement::from_vec(year4, symbol);
+        if let Some(term) = terms.next() {
+            res.push(IncomeStatement::from_vec(year1, &term, symbol));
+        };
 
-        vec![year1, year2, year3, year4]
+        if let Some(term) = terms.next() {
+            res.push(IncomeStatement::from_vec(year2, &term, symbol));
+        };
+
+        if let Some(term) = terms.next() {
+            res.push(IncomeStatement::from_vec(year3, &term, symbol));
+        };
+
+        if let Some(term) = terms.next() {
+            res.push(IncomeStatement::from_vec(year4, &term, symbol));
+        };
+
+        res
+    }
+
+    fn get_terms(html: &Html) -> Vec<String> {
+        let headers = Selector::parse(".tableHeader .column").unwrap();
+        let mut titles = vec![];
+
+        for (header_count, header) in html.select(&headers).enumerate() {
+            if header_count != 0 && header_count != 1 {
+                let text = header
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join(" ")
+                    .trim()
+                    .to_string();
+
+                titles.push(text);
+            }
+        }
+
+        titles
     }
 
     /// Create income statement from a Vec<String>
-    fn from_vec(values: Vec<String>, symbol: &str) -> Self {
+    fn from_vec(values: Vec<String>, term: &str, symbol: &str) -> Self {
         let current_date = chrono::Utc::now();
         let year = current_date.year();
         let month = current_date.month();
         let day = current_date.day();
+        let term_parser = NaiveDate::parse_from_str;
+        // Don't use unwrap
+        let term = term_parser(term, "%m/%d/%Y").unwrap();
 
         if let Some(date) = chrono::NaiveDate::from_ymd_opt(year, month, day) {
             Self {
                 symbol: symbol.to_string(),
+                term: term,
                 total_revenue: values[0].clone(),
                 income_from_associates_and_other_participating_interests: values[1].clone(),
                 special_income_charges: values[2].clone(),
@@ -121,6 +159,7 @@ impl IncomeStatement {
         let mut hasher = blake3::Hasher::new();
 
         hasher.update(self.symbol.to_string().as_bytes());
+        hasher.update(self.term.to_string().as_bytes());
         hasher.update(self.total_revenue.as_bytes());
         hasher.update(
             self.income_from_associates_and_other_participating_interests

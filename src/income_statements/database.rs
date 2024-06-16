@@ -11,7 +11,8 @@ impl IncomeStatementsDB {
             "
 CREATE TABLE IF NOT EXISTS {table_name} (
 	id serial NOT NULL,
-        symbol varchar(80),
+        symbol varchar(80) NOT NULL,
+        term date NOT NULL,
         total_revenue varchar(100),
         income_from_associates_and_other_participating_interests varchar(100),
         special_income_charges varchar(100),
@@ -27,9 +28,9 @@ CREATE TABLE IF NOT EXISTS {table_name} (
         total_unusual_items varchar(100),
         tax_rate_for_calcs varchar(100),
         tax_effect_of_unusual_items varchar(100),
-        filed date,
-        hash text UNIQUE,
-        version smallint
+        filed date NOT NULL,
+        hash text UNIQUE NOT NULL,
+        version smallint NOT NULL
 );
 -- ddl-end --
 ALTER TABLE {table_name} OWNER TO {db_owner};
@@ -51,6 +52,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         let sql = format!(
             "INSERT INTO {table_name} (
         symbol,
+        term,
         total_revenue,
         income_from_associates_and_other_participating_interests,
         special_income_charges,
@@ -71,7 +73,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         version
 )
                  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
-                         $12, $13, $14, $15, $16, $17, $18, $19);"
+                         $12, $13, $14, $15, $16, $17, $18, $19, $20);"
         );
 
         client
@@ -79,6 +81,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                 &sql,
                 &[
                     &income_statement.symbol,
+                    &income_statement.term,
                     &income_statement.total_revenue,
                     &income_statement.income_from_associates_and_other_participating_interests,
                     &income_statement.special_income_charges,
@@ -116,6 +119,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         } else {
             Ok(Some(IncomeStatement {
                 symbol: row[0].get("symbol"),
+                term: row[0].get("term"),
                 total_revenue: row[0].get("total_revenue"),
                 income_from_associates_and_other_participating_interests: row[0]
                     .get("income_from_associates_and_other_participating_interests"),
@@ -151,6 +155,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         for r in &row {
             income_statements.push(IncomeStatement {
                 symbol: r.get("symbol"),
+                term: r.get("term"),
                 total_revenue: r.get("total_revenue"),
                 income_from_associates_and_other_participating_interests: r
                     .get("income_from_associates_and_other_participating_interests"),
@@ -191,6 +196,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         for r in &row {
             income_statements.push(IncomeStatement {
                 symbol: r.get("symbol"),
+                term: r.get("term"),
                 total_revenue: r.get("total_revenue"),
                 income_from_associates_and_other_participating_interests: r
                     .get("income_from_associates_and_other_participating_interests"),
@@ -253,6 +259,7 @@ mod tests {
 
         let income_statement = IncomeStatement {
             symbol: "SBKP.JO".to_string(),
+            term: date,
             total_revenue: "1000.00".to_string(),
             income_from_associates_and_other_participating_interests: "1000.00".to_string(),
             special_income_charges: "1000.00".to_string(),
