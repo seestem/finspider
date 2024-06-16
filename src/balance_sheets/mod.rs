@@ -1,6 +1,6 @@
 use crate::{Spider, USER_AGENT, YAHOO_ROOT};
 use base64::prelude::*;
-use chrono::NaiveDate;
+use chrono::{Datelike, NaiveDate};
 use scraper::{Html, Selector};
 use serde::{Deserialize, Serialize};
 
@@ -35,7 +35,7 @@ pub struct BalanceSheet {
 }
 
 impl BalanceSheet {
-    pub fn parse(html: &str) -> Vec<BalanceSheet> {
+    pub fn parse(html: &str, symbol: &str) -> Vec<BalanceSheet> {
         let document = Html::parse_document(html);
         let rows = Selector::parse(".tableBody .row").unwrap();
         let mut year1 = vec![];
@@ -91,79 +91,91 @@ impl BalanceSheet {
             }
         }
 
-        let year1 = BalanceSheet::from_vec(&titles, year1);
-        let year2 = BalanceSheet::from_vec(&titles, year2);
-        let year3 = BalanceSheet::from_vec(&titles, year3);
-        let year4 = BalanceSheet::from_vec(&titles, year4);
-        let year5 = BalanceSheet::from_vec(&titles, year5);
+        let year1 = BalanceSheet::from_vec(&titles, year1, symbol);
+        let year2 = BalanceSheet::from_vec(&titles, year2, symbol);
+        let year3 = BalanceSheet::from_vec(&titles, year3, symbol);
+        let year4 = BalanceSheet::from_vec(&titles, year4, symbol);
+        let year5 = BalanceSheet::from_vec(&titles, year5, symbol);
 
         vec![year1, year2, year3, year4, year5]
     }
 
-    fn from_vec(titles: &[String], values: Vec<String>) -> Self {
+    fn from_vec(titles: &[String], values: Vec<String>, symbol: &str) -> Self {
         let mut balance_sheet = BalanceSheet::default();
         let mut values = values.iter();
+        let current_date = chrono::Utc::now();
+        let year = current_date.year();
+        let month = current_date.month();
+        let day = current_date.day();
 
-        for title in titles.iter() {
-            match title.as_ref() {
-                "Total Assets" => {
-                    balance_sheet.total_assets = values.next().cloned();
-                }
-                "Total Liabilities Net Minority Interest" => {
-                    balance_sheet.total_liabilities_net_minority_interest = values.next().cloned();
-                }
-                "Total Equity Gross Minority Interest" => {
-                    balance_sheet.total_equity_gross_minority_interest = values.next().cloned();
-                }
-                "Total Capitalization" => {
-                    balance_sheet.total_capitalization = values.next().cloned();
-                }
-                "Preferred Stock Equity" => {
-                    balance_sheet.preferred_stock_equity = values.next().cloned();
-                }
-                "Common Stock Equity" => {
-                    balance_sheet.common_stock_equity = values.next().cloned();
-                }
-                "Net Tangible Assets" => {
-                    balance_sheet.net_tangible_assets = values.next().cloned();
-                }
-                "Invested Capital" => {
-                    balance_sheet.invested_capital = values.next().cloned();
-                }
-                "Tangible Book Value" => {
-                    balance_sheet.tangible_book_value = values.next().cloned();
-                }
-                "Total Debt" => {
-                    balance_sheet.total_debt = values.next().cloned();
-                }
-                "Net Debt" => {
-                    balance_sheet.net_debt = values.next().cloned();
-                }
-                "Share Issued" => {
-                    balance_sheet.share_issued = values.next().cloned();
-                }
-                "Ordinary Shares Number" => {
-                    balance_sheet.ordinary_shares_number = values.next().cloned();
-                }
-                "Preferred Shares Number" => {
-                    balance_sheet.preferred_shares_number = values.next().cloned();
-                }
-                "Treasury Shares Number" => {
-                    balance_sheet.treasury_shares_number = values.next().cloned();
-                }
-                "Working Capital" => {
-                    balance_sheet.working_capital = values.next().cloned();
-                }
-                "Capital Lease Obligations" => {
-                    balance_sheet.capital_lease_obligations = values.next().cloned();
-                }
-                &_ => {
-                    println!(">>>>>>>> New field: {title}");
+        if let Some(date) = chrono::NaiveDate::from_ymd_opt(year, month, day) {
+            for title in titles.iter() {
+                match title.as_ref() {
+                    "Total Assets" => {
+                        balance_sheet.total_assets = values.next().cloned();
+                    }
+                    "Total Liabilities Net Minority Interest" => {
+                        balance_sheet.total_liabilities_net_minority_interest =
+                            values.next().cloned();
+                    }
+                    "Total Equity Gross Minority Interest" => {
+                        balance_sheet.total_equity_gross_minority_interest = values.next().cloned();
+                    }
+                    "Total Capitalization" => {
+                        balance_sheet.total_capitalization = values.next().cloned();
+                    }
+                    "Preferred Stock Equity" => {
+                        balance_sheet.preferred_stock_equity = values.next().cloned();
+                    }
+                    "Common Stock Equity" => {
+                        balance_sheet.common_stock_equity = values.next().cloned();
+                    }
+                    "Net Tangible Assets" => {
+                        balance_sheet.net_tangible_assets = values.next().cloned();
+                    }
+                    "Invested Capital" => {
+                        balance_sheet.invested_capital = values.next().cloned();
+                    }
+                    "Tangible Book Value" => {
+                        balance_sheet.tangible_book_value = values.next().cloned();
+                    }
+                    "Total Debt" => {
+                        balance_sheet.total_debt = values.next().cloned();
+                    }
+                    "Net Debt" => {
+                        balance_sheet.net_debt = values.next().cloned();
+                    }
+                    "Share Issued" => {
+                        balance_sheet.share_issued = values.next().cloned();
+                    }
+                    "Ordinary Shares Number" => {
+                        balance_sheet.ordinary_shares_number = values.next().cloned();
+                    }
+                    "Preferred Shares Number" => {
+                        balance_sheet.preferred_shares_number = values.next().cloned();
+                    }
+                    "Treasury Shares Number" => {
+                        balance_sheet.treasury_shares_number = values.next().cloned();
+                    }
+                    "Working Capital" => {
+                        balance_sheet.working_capital = values.next().cloned();
+                    }
+                    "Capital Lease Obligations" => {
+                        balance_sheet.capital_lease_obligations = values.next().cloned();
+                    }
+                    &_ => {
+                        println!(">>>>>>>> New field: {title}");
+                    }
                 }
             }
+            balance_sheet.symbol = symbol.to_string();
+            balance_sheet.filed = date;
+            balance_sheet.version = BALANCE_SHEETS_SCHEMA_VERSION;
+            balance_sheet
+        } else {
+            // TODO: do not panic
+            panic!("Date error");
         }
-
-        balance_sheet
     }
 
     pub fn hash(&self) -> String {
