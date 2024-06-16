@@ -13,6 +13,7 @@ pub const CASH_FLOWS_SCHEMA_VERSION: i16 = 0;
 #[serde(rename_all = "camelCase")]
 pub struct CashFlow {
     pub symbol: String,
+    pub term: NaiveDate,
     pub cash_flows_from_used_in_operating_activities_direct: String,
     pub operating_cash_flow: String,
     pub investing_cash_flow: String,
@@ -24,6 +25,7 @@ pub struct CashFlow {
     pub repayment_of_debt: String,
     pub repurchase_of_capital_stock: String,
     pub free_cash_flow: String,
+    #[cfg(feature = "postgres")]
     pub filed: NaiveDate,
     pub version: i16,
 }
@@ -37,6 +39,8 @@ impl CashFlow {
         let mut year3 = vec![];
         let mut year4 = vec![];
         let mut year5 = vec![];
+        let mut terms = CashFlow::get_terms(&document).into_iter();
+        let mut res = vec![];
 
         for row in document.select(&rows) {
             let columns_html = row.inner_html();
@@ -71,24 +75,62 @@ impl CashFlow {
             }
         }
 
-        let year1 = CashFlow::from_vec(year1, symbol);
-        let year2 = CashFlow::from_vec(year2, symbol);
-        let year3 = CashFlow::from_vec(year3, symbol);
-        let year4 = CashFlow::from_vec(year4, symbol);
-        let year5 = CashFlow::from_vec(year5, symbol);
+        if let Some(term) = terms.next() {
+            res.push(CashFlow::from_vec(year1, &term, symbol));
+        };
 
-        vec![year1, year2, year3, year4, year5]
+        if let Some(term) = terms.next() {
+            res.push(CashFlow::from_vec(year2, &term, symbol));
+        };
+
+        if let Some(term) = terms.next() {
+            res.push(CashFlow::from_vec(year3, &term, symbol));
+        };
+
+        if let Some(term) = terms.next() {
+            res.push(CashFlow::from_vec(year4, &term, symbol));
+        };
+
+        if let Some(term) = terms.next() {
+            res.push(CashFlow::from_vec(year5, &term, symbol));
+        };
+
+        res
     }
 
-    fn from_vec(values: Vec<String>, symbol: &str) -> Self {
+    fn get_terms(html: &Html) -> Vec<String> {
+        let headers = Selector::parse(".tableHeader .column").unwrap();
+        let mut titles = vec![];
+
+        for (header_count, header) in html.select(&headers).enumerate() {
+            if header_count != 0 && header_count != 1 {
+                let text = header
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join(" ")
+                    .trim()
+                    .to_string();
+
+                titles.push(text);
+            }
+        }
+
+        titles
+    }
+
+    fn from_vec(values: Vec<String>, term: &str, symbol: &str) -> Self {
         let current_date = chrono::Utc::now();
         let year = current_date.year();
         let month = current_date.month();
         let day = current_date.day();
+        let term_parser = NaiveDate::parse_from_str;
+        // Don't use unwrap
+        let term = term_parser(term, "%m/%d/%Y").unwrap();
 
         if let Some(date) = chrono::NaiveDate::from_ymd_opt(year, month, day) {
             Self {
                 symbol: symbol.to_string(),
+                term: term,
                 cash_flows_from_used_in_operating_activities_direct: values[0].clone(),
                 operating_cash_flow: values[1].clone(),
                 investing_cash_flow: values[2].clone(),
@@ -113,6 +155,7 @@ impl CashFlow {
         let mut hasher = blake3::Hasher::new();
 
         hasher.update(self.symbol.to_string().as_bytes());
+        hasher.update(self.term.to_string().as_bytes());
         hasher.update(
             self.cash_flows_from_used_in_operating_activities_direct
                 .to_string()

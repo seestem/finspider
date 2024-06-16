@@ -11,7 +11,8 @@ impl CashFlowDB {
             "
 CREATE TABLE IF NOT EXISTS {table_name} (
 	id serial NOT NULL,
-        symbol varchar(80),
+        symbol varchar(80) NOT NULL,
+        term date NOT NULL,
         cash_flows_from_used_in_operating_activities_direct varchar(100),
         operating_cash_flow varchar(100),
         investing_cash_flow varchar(100),
@@ -23,9 +24,9 @@ CREATE TABLE IF NOT EXISTS {table_name} (
         repayment_of_debt varchar(100),
         repurchase_of_capital_stock varchar(100),
         free_cash_flow varchar(100),
-        filed date,
-        hash text UNIQUE,
-        version smallint
+        filed date NOT NULL,
+        hash text UNIQUE NOT NULL,
+        version smallint NOT NULL
 );
 -- ddl-end --
 ALTER TABLE {table_name} OWNER TO {db_owner};
@@ -43,6 +44,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         let sql = format!(
             "INSERT INTO {table_name} (
         symbol,
+        term,
         cash_flows_from_used_in_operating_activities_direct,
         operating_cash_flow,
         investing_cash_flow,
@@ -59,7 +61,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         version
 )
                  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
-                         $12, $13, $14, $15);"
+                         $12, $13, $14, $15, $16);"
         );
 
         client
@@ -67,6 +69,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                 &sql,
                 &[
                     &cash_flow.symbol,
+                    &cash_flow.term,
                     &cash_flow.cash_flows_from_used_in_operating_activities_direct,
                     &cash_flow.operating_cash_flow,
                     &cash_flow.investing_cash_flow,
@@ -100,6 +103,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         } else {
             Ok(Some(CashFlow {
                 symbol: row[0].get("symbol"),
+                term: row[0].get("term"),
                 cash_flows_from_used_in_operating_activities_direct: row[0]
                     .get("cash_flows_from_used_in_operating_activities_direct"),
                 operating_cash_flow: row[0].get("operating_cash_flow"),
@@ -126,6 +130,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         for r in &row {
             cash_flow.push(CashFlow {
                 symbol: r.get("symbol"),
+                term: r.get("term"),
                 cash_flows_from_used_in_operating_activities_direct: r
                     .get("cash_flows_from_used_in_operating_activities_direct"),
                 operating_cash_flow: r.get("operating_cash_flow"),
@@ -158,6 +163,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         for r in &row {
             cash_flow.push(CashFlow {
                 symbol: r.get("symbol"),
+                term: r.get("term"),
                 cash_flows_from_used_in_operating_activities_direct: r
                     .get("cash_flows_from_used_in_operating_activities_direct"),
                 operating_cash_flow: r.get("operating_cash_flow"),
@@ -212,6 +218,7 @@ mod tests {
 
         let cash_flow = CashFlow {
             symbol: "SBKP.JO".to_string(),
+            term: date,
             cash_flows_from_used_in_operating_activities_direct: "1000.00".to_string(),
             operating_cash_flow: "1000.00".to_string(),
             investing_cash_flow: "1000.00".to_string(),
