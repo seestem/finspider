@@ -130,7 +130,7 @@ impl CashFlow {
         if let Some(date) = chrono::NaiveDate::from_ymd_opt(year, month, day) {
             Self {
                 symbol: symbol.to_string(),
-                term: term,
+                term,
                 cash_flows_from_used_in_operating_activities_direct: values[0].clone(),
                 operating_cash_flow: values[1].clone(),
                 investing_cash_flow: values[2].clone(),

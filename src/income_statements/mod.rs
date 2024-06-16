@@ -129,7 +129,7 @@ impl IncomeStatement {
         if let Some(date) = chrono::NaiveDate::from_ymd_opt(year, month, day) {
             Self {
                 symbol: symbol.to_string(),
-                term: term,
+                term,
                 total_revenue: values[0].clone(),
                 income_from_associates_and_other_participating_interests: values[1].clone(),
                 special_income_charges: values[2].clone(),
