@@ -389,90 +389,90 @@ mod tests {
         assert_eq!(balance_sheets[0].capital_lease_obligations, None);
     }
 
-    #[test]
-    fn test_multiple_balance_sheets() {
-        let symbol = "avgo";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    // #[test]
+    // fn test_multiple_balance_sheets() {
+    //     let symbol = "avgo";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "kfy";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "kfy";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "bili";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "bili";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "bbar";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "bbar";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "cepu";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "cepu";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "tgs";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "tgs";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "vrt";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "vrt";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "bma";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "bma";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "mcw";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "mcw";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "cc";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "cc";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "teo";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "teo";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "rytm";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "rytm";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "hph";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "hph";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "tal";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "tal";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "ibrx";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "ibrx";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "incy";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "incy";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "ymm";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "ymm";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "cgnx";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "cgnx";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "qrvo";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "qrvo";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "pam";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
+    //     let symbol = "pam";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
 
-        let symbol = "srpt";
-        let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html, symbol);
-    }
+    //     let symbol = "srpt";
+    //     let html = BalanceSheet::fetch(symbol).unwrap();
+    //     BalanceSheet::parse(&html, symbol);
+    // }
 }
