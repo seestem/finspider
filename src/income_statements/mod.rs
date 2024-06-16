@@ -28,6 +28,7 @@ pub struct IncomeStatement {
     pub total_unusual_items: String,
     pub tax_rate_for_calcs: String,
     pub tax_effect_of_unusual_items: String,
+    #[cfg(feature = "postgres")]
     pub filed: NaiveDate,
     pub version: i16,
 }

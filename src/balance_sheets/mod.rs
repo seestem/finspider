@@ -13,6 +13,7 @@ pub const BALANCE_SHEETS_SCHEMA_VERSION: i16 = 0;
 #[serde(rename_all = "camelCase")]
 pub struct BalanceSheet {
     pub symbol: String,
+    pub term: NaiveDate,
     pub total_assets: Option<String>,
     pub total_liabilities_net_minority_interest: Option<String>,
     pub total_equity_gross_minority_interest: Option<String>,
@@ -30,6 +31,7 @@ pub struct BalanceSheet {
     pub treasury_shares_number: Option<String>,
     pub working_capital: Option<String>,
     pub capital_lease_obligations: Option<String>,
+    #[cfg(feature = "postgres")]
     pub filed: NaiveDate,
     pub version: i16,
 }
@@ -44,6 +46,8 @@ impl BalanceSheet {
         let mut year4 = vec![];
         let mut year5 = vec![];
         let mut titles = vec![];
+        let mut terms = BalanceSheet::get_terms(&document).into_iter();
+        let mut res = vec![];
 
         for row in document.select(&rows) {
             let columns_html = row.inner_html();
@@ -91,22 +95,59 @@ impl BalanceSheet {
             }
         }
 
-        let year1 = BalanceSheet::from_vec(&titles, year1, symbol);
-        let year2 = BalanceSheet::from_vec(&titles, year2, symbol);
-        let year3 = BalanceSheet::from_vec(&titles, year3, symbol);
-        let year4 = BalanceSheet::from_vec(&titles, year4, symbol);
-        let year5 = BalanceSheet::from_vec(&titles, year5, symbol);
+        if let Some(term) = terms.next() {
+            res.push(BalanceSheet::from_vec(&titles, year1, &term, symbol));
+        };
 
-        vec![year1, year2, year3, year4, year5]
+        if let Some(term) = terms.next() {
+            res.push(BalanceSheet::from_vec(&titles, year2, &term, symbol));
+        };
+
+        if let Some(term) = terms.next() {
+            res.push(BalanceSheet::from_vec(&titles, year3, &term, symbol));
+        };
+
+        if let Some(term) = terms.next() {
+            res.push(BalanceSheet::from_vec(&titles, year4, &term, symbol));
+        };
+
+        if let Some(term) = terms.next() {
+            res.push(BalanceSheet::from_vec(&titles, year5, &term, symbol));
+        };
+
+        res
     }
 
-    fn from_vec(titles: &[String], values: Vec<String>, symbol: &str) -> Self {
+    fn get_terms(html: &Html) -> Vec<String> {
+        let headers = Selector::parse(".tableHeader .column").unwrap();
+        let mut titles = vec![];
+
+        for (header_count, header) in html.select(&headers).enumerate() {
+            if header_count != 0 {
+                let text = header
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join(" ")
+                    .trim()
+                    .to_string();
+
+                titles.push(text);
+            }
+        }
+
+        titles
+    }
+
+    fn from_vec(titles: &[String], values: Vec<String>, term: &str, symbol: &str) -> Self {
         let mut balance_sheet = BalanceSheet::default();
         let mut values = values.iter();
         let current_date = chrono::Utc::now();
         let year = current_date.year();
         let month = current_date.month();
         let day = current_date.day();
+        let term_parser = NaiveDate::parse_from_str;
+        // Don't use unwrap
+        let term = term_parser(term, "%m/%d/%Y").unwrap();
 
         if let Some(date) = chrono::NaiveDate::from_ymd_opt(year, month, day) {
             for title in titles.iter() {
@@ -169,6 +210,7 @@ impl BalanceSheet {
                 }
             }
             balance_sheet.symbol = symbol.to_string();
+            balance_sheet.term = term;
             balance_sheet.filed = date;
             balance_sheet.version = BALANCE_SHEETS_SCHEMA_VERSION;
             balance_sheet
@@ -182,6 +224,7 @@ impl BalanceSheet {
         let mut hasher = blake3::Hasher::new();
 
         hasher.update(self.symbol.to_string().as_bytes());
+        hasher.update(self.term.to_string().as_bytes());
 
         if let Some(total_assets) = &self.total_assets {
             hasher.update(total_assets.as_bytes());
@@ -280,7 +323,7 @@ mod tests {
     fn test_balance_sheets_standard_bank() {
         let symbol = "SBKP.JO";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        let balance_sheets: Vec<BalanceSheet> = BalanceSheet::parse(&html);
+        let balance_sheets: Vec<BalanceSheet> = BalanceSheet::parse(&html, symbol);
 
         assert_eq!(balance_sheets.len(), 5);
         assert_eq!(
@@ -350,86 +393,86 @@ mod tests {
     fn test_multiple_balance_sheets() {
         let symbol = "avgo";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "kfy";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "bili";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "bbar";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "cepu";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "tgs";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "vrt";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "bma";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "mcw";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "cc";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "teo";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "rytm";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "hph";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "tal";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "ibrx";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "incy";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "ymm";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "cgnx";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "qrvo";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "pam";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
 
         let symbol = "srpt";
         let html = BalanceSheet::fetch(symbol).unwrap();
-        BalanceSheet::parse(&html);
+        BalanceSheet::parse(&html, symbol);
     }
 }

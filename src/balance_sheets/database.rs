@@ -11,7 +11,8 @@ impl BalanceSheetsDB {
             "
 CREATE TABLE IF NOT EXISTS {table_name} (
 	id serial NOT NULL,
-        symbol varchar(80),
+        symbol varchar(80) NOT NULL,
+        term date NOT NULL,
         total_assets varchar(100),
         total_liabilities_net_minority_interest varchar(100),
         total_equity_gross_minority_interest varchar(100),
@@ -29,9 +30,9 @@ CREATE TABLE IF NOT EXISTS {table_name} (
         treasury_shares_number varchar(100),
         working_capital varchar(100),
         capital_lease_obligations varchar(100),
-        filed date,
-        hash text UNIQUE,
-        version smallint
+        filed date NOT NULL,
+        hash text UNIQUE NOT NULL,
+        version smallint NOT NULL
 );
 -- ddl-end --
 ALTER TABLE {table_name} OWNER TO {db_owner};
@@ -53,6 +54,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         let sql = format!(
             "INSERT INTO {table_name} (
         symbol,
+        term,
         total_assets,
         total_liabilities_net_minority_interest,
         total_equity_gross_minority_interest,
@@ -75,7 +77,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         version
 )
                  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
-                         $12, $13, $14, $15, $16, $17, $18, $19, $20, $21);"
+                         $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22);"
         );
 
         client
@@ -83,6 +85,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                 &sql,
                 &[
                     &balance_sheet.symbol,
+                    &balance_sheet.term,
                     &balance_sheet.total_assets,
                     &balance_sheet.total_liabilities_net_minority_interest,
                     &balance_sheet.total_equity_gross_minority_interest,
@@ -122,6 +125,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         } else {
             Ok(Some(BalanceSheet {
                 symbol: row[0].get("symbol"),
+                term: row[0].get("term"),
                 total_assets: row[0].get("total_assets"),
                 total_liabilities_net_minority_interest: row[0]
                     .get("total_liabilities_net_minority_interest"),
@@ -155,6 +159,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         for r in &row {
             balance_sheet.push(BalanceSheet {
                 symbol: r.get("symbol"),
+                term: r.get("term"),
                 total_assets: r.get("total_assets"),
                 total_liabilities_net_minority_interest: r
                     .get("total_liabilities_net_minority_interest"),
@@ -193,6 +198,7 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         for r in &row {
             balance_sheet.push(BalanceSheet {
                 symbol: r.get("symbol"),
+                term: r.get("term"),
                 total_assets: r.get("total_assets"),
                 total_liabilities_net_minority_interest: r
                     .get("total_liabilities_net_minority_interest"),
@@ -253,6 +259,7 @@ mod tests {
 
         let balance_sheet = BalanceSheet {
             symbol: "SBKP.JO".to_string(),
+            term: date,
             total_assets: Some("1000.00".to_string()),
             total_liabilities_net_minority_interest: Some("1000.00".to_string()),
             total_equity_gross_minority_interest: Some("1000.00".to_string()),
