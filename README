@@ -27,7 +27,7 @@ Cargo Features
 Usage
   add the following in Cargo.toml:
 
-    finspider = { git = "https://github.com/cy6erlion/finspider.git" }
+    finspider = { git = "https://github.com/seestem/finspider.git" }
 
 Documentation
   use rust doc:
@@ -49,7 +49,7 @@ Unlicense
   repository.
 
 Source
-  $ git clone https://github.com/cy6erlion/finspider.git
+  $ git clone https://github.com/seestem/finspider.git
   
 Authors
   Jackson G. Kaindume
