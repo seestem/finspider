@@ -197,7 +197,6 @@ impl CashFlow {
                     }
                     &_ => {
                         println!(">>>>>>>> New field (Cash Flow): {title}");
-                        panic!();
                     }
                 }
             }
