@@ -24,6 +24,9 @@ CREATE TABLE IF NOT EXISTS {table_name} (
         repayment_of_debt varchar(100),
         repurchase_of_capital_stock varchar(100),
         free_cash_flow varchar(100),
+        income_tax_paid_supplemental_data varchar(100),
+        interest_paid_supplemental_data varchar(100),
+        other_cash_adjustment_inside_change_in_cash varchar(100),
         filed date NOT NULL,
         hash text UNIQUE NOT NULL,
         version smallint NOT NULL
@@ -56,12 +59,15 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
         repayment_of_debt,
         repurchase_of_capital_stock,
         free_cash_flow,
+        income_tax_paid_supplemental_data,
+        interest_paid_supplemental_data,
+        other_cash_adjustment_inside_change_in_cash,
         filed,
         hash,
         version
 )
                  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
-                         $12, $13, $14, $15, $16);"
+                         $12, $13, $14, $15, $16, $17, $18, $19);"
         );
 
         client
@@ -81,6 +87,9 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                     &cash_flow.repayment_of_debt,
                     &cash_flow.repurchase_of_capital_stock,
                     &cash_flow.free_cash_flow,
+                    &cash_flow.income_tax_paid_supplemental_data,
+                    &cash_flow.interest_paid_supplemental_data,
+                    &cash_flow.other_cash_adjustment_inside_change_in_cash,
                     &cash_flow.filed,
                     &cash_flow.hash(),
                     &cash_flow.version,
@@ -116,6 +125,10 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                 repayment_of_debt: row[0].get("repayment_of_debt"),
                 repurchase_of_capital_stock: row[0].get("repurchase_of_capital_stock"),
                 free_cash_flow: row[0].get("free_cash_flow"),
+                income_tax_paid_supplemental_data: row[0].get("income_tax_paid_supplemental_data"),
+                interest_paid_supplemental_data: row[0].get("interest_paid_supplemental_data"),
+                other_cash_adjustment_inside_change_in_cash: row[0]
+                    .get("other_cash_adjustment_inside_change_in_cash"),
                 version: row[0].get("version"),
                 filed: row[0].get("filed"),
             }))
@@ -143,6 +156,10 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                 repayment_of_debt: r.get("repayment_of_debt"),
                 repurchase_of_capital_stock: r.get("repurchase_of_capital_stock"),
                 free_cash_flow: r.get("free_cash_flow"),
+                income_tax_paid_supplemental_data: r.get("income_tax_paid_supplemental_data"),
+                interest_paid_supplemental_data: r.get("interest_paid_supplemental_data"),
+                other_cash_adjustment_inside_change_in_cash: r
+                    .get("other_cash_adjustment_inside_change_in_cash"),
                 filed: r.get("filed"),
                 version: r.get("version"),
             })
@@ -176,6 +193,10 @@ ALTER TABLE {table_name} OWNER TO {db_owner};
                 repayment_of_debt: r.get("repayment_of_debt"),
                 repurchase_of_capital_stock: r.get("repurchase_of_capital_stock"),
                 free_cash_flow: r.get("free_cash_flow"),
+                income_tax_paid_supplemental_data: r.get("income_tax_paid_supplemental_data"),
+                interest_paid_supplemental_data: r.get("interest_paid_supplemental_data"),
+                other_cash_adjustment_inside_change_in_cash: r
+                    .get("other_cash_adjustment_inside_change_in_cash"),
                 filed: r.get("filed"),
                 version: r.get("version"),
             })
@@ -219,17 +240,20 @@ mod tests {
         let cash_flow = CashFlow {
             symbol: "SBKP.JO".to_string(),
             term: date,
-            cash_flows_from_used_in_operating_activities_direct: "1000.00".to_string(),
-            operating_cash_flow: "1000.00".to_string(),
-            investing_cash_flow: "1000.00".to_string(),
-            financing_cash_flow: "1000.00".to_string(),
-            end_cash_position: "1000.00".to_string(),
-            capital_expenditure: "1000.00".to_string(),
-            issuance_of_capital_stock: "1000.00".to_string(),
-            issuance_of_debt: "1000.00".to_string(),
-            repayment_of_debt: "1000.00".to_string(),
-            repurchase_of_capital_stock: "1000.00".to_string(),
-            free_cash_flow: "1000.00".to_string(),
+            cash_flows_from_used_in_operating_activities_direct: Some("1000.00".to_string()),
+            operating_cash_flow: Some("1000.00".to_string()),
+            investing_cash_flow: Some("1000.00".to_string()),
+            financing_cash_flow: Some("1000.00".to_string()),
+            end_cash_position: Some("1000.00".to_string()),
+            capital_expenditure: Some("1000.00".to_string()),
+            issuance_of_capital_stock: Some("1000.00".to_string()),
+            issuance_of_debt: Some("1000.00".to_string()),
+            repayment_of_debt: Some("1000.00".to_string()),
+            repurchase_of_capital_stock: Some("1000.00".to_string()),
+            free_cash_flow: Some("1000.00".to_string()),
+            income_tax_paid_supplemental_data: Some("1000.00".to_string()),
+            interest_paid_supplemental_data: Some("1000.00".to_string()),
+            other_cash_adjustment_inside_change_in_cash: Some("1000.00".to_string()),
             filed: date,
             version: 0,
         };
