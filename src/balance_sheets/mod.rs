@@ -205,7 +205,7 @@ impl BalanceSheet {
                         balance_sheet.capital_lease_obligations = values.next().cloned();
                     }
                     &_ => {
-                        println!(">>>>>>>> New field: {title}");
+                        println!(">>>>>>>> New field (Balance Sheet): {title}");
                     }
                 }
             }
