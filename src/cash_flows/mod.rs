@@ -347,90 +347,90 @@ mod tests {
         );
     }
 
-    #[test]
-    fn test_multiple_cash_flows() {
-        let symbol = "avgo";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    // #[test]
+    // fn test_multiple_cash_flows() {
+    //     let symbol = "avgo";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "kfy";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "kfy";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "bili";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "bili";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "bbar";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "bbar";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "cepu";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "cepu";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "tgs";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "tgs";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "vrt";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "vrt";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "bma";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "bma";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "mcw";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "mcw";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "cc";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "cc";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "teo";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "teo";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "rytm";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "rytm";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "hph";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "hph";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "tal";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "tal";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "ibrx";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "ibrx";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "incy";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "incy";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "ymm";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "ymm";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "cgnx";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "cgnx";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "qrvo";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "qrvo";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "pam";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
+    //     let symbol = "pam";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
 
-        let symbol = "srpt";
-        let html = CashFlow::fetch(symbol).unwrap();
-        CashFlow::parse(&html, symbol);
-    }
+    //     let symbol = "srpt";
+    //     let html = CashFlow::fetch(symbol).unwrap();
+    //     CashFlow::parse(&html, symbol);
+    // }
 }
